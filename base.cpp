@@ -1,4 +1,4 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 struct DienThoai
 {
@@ -770,6 +770,7 @@ void KhaithacLK(QLHD &QHD, QLDT &QDT)
     bool timThay = false;
     float tongChiTieu = 0;
     float tongGiamGia = 0;
+
     while (p != NULL)
     {
         if (p->info.sMaKH == sMaKH)
@@ -823,9 +824,10 @@ void KhaithacLK(QLHD &QHD, QLDT &QDT)
     }
     if (!timThay)
     {
-        cout << "Khach hang chua mua hoa don nao";
+        cout << "Khach hang chua mua hoa don nao!\n";
         return;
     }
+
     string thHayChon = "N/A";
     int maxSL = 0;
     for (int i = 0; i < nTH; i++)
@@ -835,12 +837,12 @@ void KhaithacLK(QLHD &QHD, QLDT &QDT)
             maxSL = slTH[i];
             thHayChon = dsTH[i];
         }
-
-        cout << "\n---------------- TONG KET KHACH HANG ----------------\n";
-        cout << "Tong chi tieu cong don : " << (long long)tongChiTieu << " VND\n";
-        cout << "Tong tien da duoc giam : " << (long long)tongGiamGia << " VND\n";
-        cout << "Thuong hieu hay chon   : " << thHayChon << " (Da mua: " << maxSL << " may)\n";
     }
+
+    cout << "\n---------------- TONG KET KHACH HANG ----------------\n";
+    cout << "Tong chi tieu cong don : " << (long long)tongChiTieu << " VND\n";
+    cout << "Tong tien da duoc giam : " << (long long)tongGiamGia << " VND\n";
+    cout << "Thuong hieu hay chon   : " << thHayChon << " (Da mua: " << maxSL << " may)\n";
 }
 
 // YÊU CẦU tìm kiếm
@@ -870,6 +872,7 @@ void DT_Theo_SoLuong(QLDT &Q)
     if (Q.head == NULL || Q.head->next == NULL)
     {
         cout << "Khong co dien thoai duoc nhap" << endl;
+        return;
     }
     for (NodeDT *p = Q.head; Q.head != NULL; p = p->next)
     {
@@ -890,6 +893,7 @@ void HD_Theo_NgayLap(QLHD &Q)
     if (Q.head == NULL || Q.head->next == NULL)
     {
         cout << "Khong co hoa don nao duoc lap" << endl;
+        return;
     }
     for (NodeHD *p = Q.head; Q.head != NULL; p = p->next)
     {
@@ -934,7 +938,7 @@ void Doanh_thu(QLHD &QHD, QLDT &QDT)
     {
         tong_doanh_thu += pHD->info.fTongTienPhaiTra;
         tong_sl += pHD->info.iTongSL;
-        tong_giam_Gia += pHD->info.fGiamGia;
+        tong_giam_gia += pHD->info.fGiamGia;
         pHD = pHD->next;
     }
     NodeDT *pDT = QDT.head;
@@ -943,10 +947,9 @@ void Doanh_thu(QLHD &QHD, QLDT &QDT)
         tong_ton += pDT->info.iSoLuongTon * pDT->info.fDonGia;
         pDT = pDT->next;
     }
-    split(20, x)
-            cout
-        << "Thong ke cua hang" << end;
-    split(20, '-');
+    cout << string(40, '-') << endl;
+    cout << "Thong ke cua hang" << endl;
+    cout << string(40, '-') << endl;
     cout << "Tong doanh thu cua hang:" << tong_doanh_thu << endl;
     cout << "Tong so luong dien thoai da ban:" << tong_sl << endl;
     cout << "Tong tien giam gia da cap:" << tong_giam_gia << endl;
@@ -955,23 +958,40 @@ void Doanh_thu(QLHD &QHD, QLDT &QDT)
 
 void Trung_Binh(QLHD &QHD, QLDT &QDT)
 {
+    cout << "\n--- THONG KE TRUNG BINH HOA DON ---\n";
     NodeHD *pHD = QHD.head;
-    int so_HD = 0, tong_may;
-    long long tb_HD;
+    int so_HD = 0, tong_may = 0;
+    double tong_tien_HD = 0;
+
     while (pHD != NULL)
     {
-        tb_HD += pHD->info.fTongTienPhaiTra / pHD->info.iTongSL;
+        tong_tien_HD += pHD->info.fTongTienPhaiTra;
         tong_may += pHD->info.iTongSL;
-        so_HD += 1;
+        so_HD++;
         pHD = pHD->next;
     }
-    cout << "Gia tri trung binh cua mot hoa don: \n"
-         << tb_HD;
-    cout << "So may trung binh tren mot hoa don: \n"
-         << so_HD / tong_may;
-    string dsThuongHieu[20];
-    double tong_gia[20];
-    double so_long[20];
+
+    if (so_HD == 0)
+    {
+        cout << "Chua co hoa don nao de tinh trung binh!\n";
+    }
+    else
+    {
+        cout << "Gia tri trung binh cua mot hoa don : " << (long long)(tong_tien_HD / so_HD) << " VND\n";
+        cout << "So may trung binh tren mot hoa don : " << fixed << setprecision(2) << (double)tong_may / so_HD << " may\n";
+    }
+
+    cout << "\n--- DON GIA TRUNG BINH THEO THUONG HIEU ---\n";
+    if (QDT.head == NULL)
+    {
+        cout << "Danh sach dien thoai dang trong!\n";
+        return;
+    }
+
+    string dsThuongHieu[50];
+    double tong_gia[50] = {0};
+    int soLuongMau[50] = {0};
+    int nTH = 0;
 
     NodeDT *pDT = QDT.head;
     while (pDT != NULL)
@@ -988,9 +1008,24 @@ void Trung_Binh(QLHD &QHD, QLDT &QDT)
         }
         if (pos != -1)
         {
-            tong_gia += pDT->info.fDonGia;
+            tong_gia[pos] += pDT->info.fDonGia;
             soLuongMau[pos]++;
         }
+        else
+        {
+            dsThuongHieu[nTH] = th;
+            tong_gia[nTH] = pDT->info.fDonGia;
+            soLuongMau[nTH] = 1;
+            nTH++;
+        }
+        pDT = pDT->next;
+    }
+
+    for (int i = 0; i < nTH; i++)
+    {
+        cout << "- " << dsThuongHieu[i] << ": "
+             << (long long)(tong_gia[i] / soLuongMau[i]) << " VND ("
+             << soLuongMau[i] << " mau)\n";
     }
 }
 
@@ -1005,28 +1040,36 @@ int main()
     init(qNV);
     QLHD qHD;
     init(qHD);
+
     int luaChon;
     do
     {
         cout << "\n================ MENU QUAN LY CUA HANG DIEN THOAI ================\n";
-        cout << " [1] Nhap danh sach dien thoai \n";
-        cout << " [2] Nhap danh sach Khach Hang\n";
-        cout << " [3] Nhap danh sach Nhah Vien\n";
-        cout << " [4] Lap hoa don moi (Tru kho tu dong)\n";
+        cout << " [1]  Nhap danh sach dien thoai\n";
+        cout << " [2]  Nhap danh sach khach hang\n";
+        cout << " [3]  Nhap danh sach nhan vien\n";
+        cout << " [4]  Lap hoa don moi (Tru kho tu dong)\n";
         cout << "-----------------------------------------------------------------\n";
-        cout << " [5] IN danh sach dien thoai\n";
-        cout << " [6] IN danh sach khach Hang\n";
-        cout << " [7] IN danh sach nhan vien\n";
-        cout << " [8] IN danh sach Don\n";
+        cout << " [5]  In danh sach dien thoai\n";
+        cout << " [6]  In danh sach khach hang\n";
+        cout << " [7]  In danh sach nhan vien\n";
+        cout << " [8]  In danh sach hoa don\n";
         cout << "-----------------------------------------------------------------\n";
-        cout << " [9] Tim dien thoai theo Ma\n";
-        cout << " [10] Tim hoa don theo Ma\n";
+        cout << " [9]  Tim dien thoai theo ma\n";
+        cout << " [10] Tim hoa don theo ma\n";
         cout << " [11] Tim dien thoai theo khoang gia\n";
         cout << " [12] Thong ke chi tieu khach hang\n";
         cout << "-----------------------------------------------------------------\n";
-        cout << " [13] Luu  du lieu ra File (.txt)\n";
-        cout << " [14] Doc  du lieu tu File (.txt)\n";
-        cout << " [0] Thoat chuong trinh\n";
+        cout << " [13] Luu du lieu ra File (.txt)\n";
+        cout << " [14] Doc du lieu tu File (.txt)\n";
+        cout << "-----------------------------------------------------------------\n";
+        cout << " [15] Sap xep dien thoai theo don gia (giam dan)\n";
+        cout << " [16] Sap xep dien thoai theo so luong ton (giam dan)\n";
+        cout << " [17] Sap xep hoa don theo ngay lap (tang dan)\n";
+        cout << " [18] Sap xep dien thoai theo thuong hieu & gia\n";
+        cout << " [19] Thong ke doanh thu & ton kho\n";
+        cout << " [20] Thong ke gia tri trung binh\n";
+        cout << " [0]  Thoat chuong trinh\n";
         cout << "=================================================================\n";
         cout << "LUA CHON CUA BAN: ";
         cin >> luaChon;
@@ -1073,13 +1116,30 @@ int main()
             ghiTepDT(qDT);
             ghiTepKH(qKH);
             ghiTepNV(qNV);
-            cout << ">> Luu du lieu thanh cong!\n";
+            cout << "Luu du kieu thanh cong \n";
             break;
         case 14:
             docTepDT(qDT);
             docTepKH(qKH);
             docTepNV(qNV);
-            cout << ">> Da doc toan bo du lieu thanh cong!\n";
+            break;
+        case 15:
+            DT_Theo_Gia(qDT);
+            break;
+        case 16:
+            DT_Theo_SoLuong(qDT);
+            break;
+        case 17:
+            HD_Theo_NgayLap(qHD);
+            break;
+        case 18:
+            HD_Theo_ThuongHieu_va_Gia(qDT);
+            break;
+        case 19:
+            Doanh_thu(qHD, qDT);
+            break;
+        case 20:
+            Trung_Binh(qHD, qDT);
             break;
         case 0:
             cout << "Cam on ban da su dung chuong trinh!\n";
